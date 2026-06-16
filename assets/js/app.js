@@ -19,33 +19,43 @@ function snackBar(msg,i){
     Swal.fire({
         title:msg,
         icon:i,
-        timer:300
+        timer:3000
     })
 }
+
+function toolTips(){
+
+  $('[data-toggle="tooltip"]').tooltip()
+
+}
+
 function cerateCards(arr){
     let res=''
     arr.forEach(p => {
         res+=` <div class="col-md-4 mt-5 " id="${p.id}">
                 <div class="card h-100">
-                    <div class="card-header">
+                    <div class="card-header" data-toggle="tooltip" data-placement="top" title="${p.title}">
                         <h3>${p.title}</h3>
                     </div>
                     <div class="card-body">
                         <p>${p.body}</p>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <i onclick="onEdit(this)" class="fa-solid fa-pen-to-square fa-2x text-primary"></i>
-                        <i onclick="onRemove(this)" class="fa-solid fa-trash-can fa-2x text-danger"></i>
+                        <i onclick="onEdit(this)" class="fa-solid fa-pen-to-square fa-2x text-primary"
+                        data-toggle="tooltip" data-placement="top" title="Edit Post"></i>
+                        <i onclick="onRemove(this)" class="fa-solid fa-trash-can fa-2x text-danger"
+                        data-toggle="tooltip" data-placement="top" title="Delete Post"></i>
                     </div>
                 </div>
             </div>`
     });
     postContainer.innerHTML=res
+    toolTips()
 }
 
 
 function fetchPosts(){
-    spinner.classList.remove('d-none')
+    
     let xhr=new XMLHttpRequest()
     xhr.open('GET',POST_URL);
     xhr.send(null);
@@ -54,9 +64,9 @@ function fetchPosts(){
             let res=JSON.parse(xhr.response);
             postArr=res
             cerateCards(res.reverse())
-            spinner.classList.add('d-none')
+            
         }else{
-            spinner.classList.add('d-none')
+            
             snackBar('something went wrong..','error')
         }
     }
@@ -84,20 +94,23 @@ function onSubmitPost(ele){
             col.className='col-md-4 mt-5'
             col.id=res.id
             col.innerHTML=` <div class="card h-100">
-                    <div class="card-header">
+                    <div class="card-header" data-toggle="tooltip" data-placement="top" title="${new_post.title}">
                         <h3>${new_post.title}</h3>
                     </div>
                     <div class="card-body">
                         <p>${new_post.body}</p>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <i onclick="onEdit(this)" class="fa-solid fa-pen-to-square fa-2x text-primary"></i>
-                        <i onclick="onRemove(this)" class="fa-solid fa-trash-can fa-2x text-danger"></i>
+                        <i onclick="onEdit(this)" class="fa-solid fa-pen-to-square fa-2x text-primary"
+                         data-toggle="tooltip" data-placement="top" title="Edit Post"></i>
+                        <i onclick="onRemove(this)" class="fa-solid fa-trash-can fa-2x text-danger"
+                         data-toggle="tooltip" data-placement="top" title="Delete Post"></i>
                     </div>
                 </div>`
             postContainer.prepend(col)
             spinner.classList.add('d-none')
-            snackBar('Post Added Successfully', 'success');
+            toolTips()
+            snackBar(`Post ${res.id} Added Successfully`, 'success');
 
         } else {
             spinner.classList.add('d-none')
@@ -159,6 +172,10 @@ function onEdit(ele){
             postIDControl.value=res.useId
         }
 
+        postForm.scrollIntoView({
+            behavior:'smooth',
+            block:'center'
+        })
         addBtn.classList.add('d-none')
         updateBtn.classList.remove('d-none')
         spinner.classList.add('d-none')
@@ -184,8 +201,30 @@ function onPostUpdate(){
             let card=document.getElementById(UPDATE_ID)
             card.querySelector('.card-header h3').innerHTML=res.title;
             card.querySelector('.card-body p').innerHTML=res.body;
+            let header = card.querySelector('.card-header');
+
+            header.setAttribute('title', res.title);
+
+            // Purana tooltip destroy karo
+            $(header).tooltip('dispose');
+
+            // Naya tooltip initialize karo
+            $(header).tooltip();
             addBtn.classList.remove('d-none')
              updateBtn.classList.add('d-none')
+
+            let updatedPost=document.getElementById(UPDATE_ID);
+            updatedPost.classList.add('bg')
+
+            updatedPost.scrollIntoView({
+                behavior:'smooth',
+                block:'center'
+            })
+
+            setTimeout(() => {
+                updatedPost.classList.remove('bg')
+                
+            }, 3000);
             postForm.reset()
             spinner.classList.add('d-none')
 

@@ -29,3 +29,14 @@ body{
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+.fa-pen-to-square,.fa-trash-can{
+   cursor: pointer;
+   transition: .3;
+}
+.fa-pen-to-square:hover,.fa-trash-can:hover{
+    transform: scale(1.3);
+}
+
+.bg .card{
+    background-color: #153261;
+}
