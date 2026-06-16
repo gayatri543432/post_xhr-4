@@ -205,10 +205,8 @@ function onPostUpdate(){
 
             header.setAttribute('title', res.title);
 
-            // Purana tooltip destroy karo
             $(header).tooltip('dispose');
 
-            // Naya tooltip initialize karo
             $(header).tooltip();
             addBtn.classList.remove('d-none')
              updateBtn.classList.add('d-none')
