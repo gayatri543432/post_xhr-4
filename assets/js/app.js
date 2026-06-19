@@ -4,7 +4,7 @@ const cl=console.log;
 const postForm=document.getElementById('postForm')
 const titleControl=document.getElementById('title')
 const bodyControl=document.getElementById('body')
-const postIDControl=document.getElementById('useId')
+const postIDControl=document.getElementById('userId')
 const addBtn=document.getElementById('addBtn')
 const updateBtn=document.getElementById('updateBtn')
 const postContainer=document.getElementById('postContainer')
@@ -78,7 +78,7 @@ function onSubmitPost(ele){
     let new_post={
         title:titleControl.value,
         body:bodyControl.value,
-        useId: postIDControl.value
+        userId: postIDControl.value
     }
     let xhr=new XMLHttpRequest()
     xhr.open('POST',POST_URL)
@@ -108,6 +108,7 @@ function onSubmitPost(ele){
                     </div>
                 </div>`
             postContainer.prepend(col)
+            postForm.reset()
             spinner.classList.add('d-none')
             toolTips()
             snackBar(`Post ${res.id} Added Successfully`, 'success');
@@ -169,7 +170,7 @@ function onEdit(ele){
             let res=JSON.parse(xhr.response)
             titleControl.value=res.title;
             bodyControl.value=res.body;
-            postIDControl.value=res.useId
+            postIDControl.value=res.userId
         }
 
         postForm.scrollIntoView({
@@ -188,7 +189,7 @@ function onPostUpdate(){
     let updated_obj={
         title:titleControl.value,
         body:bodyControl.value,
-        useId: postIDControl.value,
+        userId: postIDControl.value,
 
     }
     let xhr=new XMLHttpRequest()
